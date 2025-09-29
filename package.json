@@ -1,0 +1,16 @@
+{
+  "name": "tienda-online-cli",
+  "version": "1.0.0",
+  "description": "Herramienta CLI para gestionar productos de una tienda online.",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js"
+  },
+  "keywords": [],
+  "author": "Florencia",
+  "license": "ISC",
+  "dependencies": {
+    "node-fetch": "^3.3.2"
+  }
+}

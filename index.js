@@ -1,116 +1,39 @@
-import fs from "fs";
-import fetch from "node-fetch";
+import express from "express"
+import cors from "cors"
+import { configDotenv } from "dotenv"
+import rutasLog from "./src/routes/auth.routes.js"
+import productsRoutes from "./src/routes/products.routes.js"
 
-const BASE_URL = "https://fakestoreapi.com";
+const app = express();
+const PORT = process.env.PORT || 3000;
 
-// Cargamos productos locales para fallback
-const productosLocales = JSON.parse(fs.readFileSync("./src/data/productos.json", "utf-8"));
-
-// Mensaje inicial
-console.log("🚀 Bienvenido a Tienda Online CLI");
-
-// Capturar argumentos de la terminal
-const args = process.argv.slice(2);
-const [method, resource, ...rest] = args;
-
-// Función: Obtener todos los productos
-async function getAllProducts() {
-  try {
-    const res = await fetch(`${BASE_URL}/products`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
-
-    const data = await res.json();
-    if (!Array.isArray(data) || data.length === 0) throw new Error("Datos vacíos");
-
-    console.log("📦 Todos los productos (API):");
-    console.table(data, ["id", "title", "price", "category"]);
-  } catch (error) {
-    console.log("❌ No se pudo conectar a la API. Mostrando productos locales:");
-    console.table(productosLocales, ["id", "nombre", "precio"]);
-  }
+const corsConfig = {
+    origin: ['http://localhost:3000', 'https://midominio.com'],
+    methods: ['GET', 'POST', 'PUT', 'DELETE'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    exposedHeaders: ['Content-Length'],
+    credentials: true,
+    maxAge: 600,
+    optionsSuccessStatus: 204
 }
 
-// Función: Obtener producto por ID
-async function getProductById(id) {
-  try {
-    const res = await fetch(`${BASE_URL}/products/${id}`);
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+app.use(cors(corsConfig))
+app.use(express.json())
 
-    const data = await res.json();
-    console.log(`📦 Producto ${id} (API):`);
-    console.log(data);
-  } catch (error) {
-    console.log(`❌ No se pudo obtener el producto ${id} de la API. Buscando localmente...`);
-    const producto = productosLocales.find(p => p.id == id);
-    if (producto) console.log(producto);
-    else console.log("❌ Producto no encontrado");
-  }
-}
+app.use("/api", rutasLog)
 
-// Función: Crear producto
-async function createProduct(title, price, category) {
-  try {
-    const res = await fetch(`${BASE_URL}/products`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ title, price, category }),
-    });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+app.use((req, res, next) => {
+    console.log(`Datos received at:  ${req.method} ${req.url}`);
+    next();
+});
 
-    const data = await res.json();
-    console.log("✅ Producto creado (API):");
-    console.log(data);
-  } catch (error) {
-    console.log("❌ No se pudo crear el producto en la API.");
-    console.log("Puede agregarlo manualmente a productos.json para pruebas locales.");
-  }
-}
+// CORREGIDO 👇
+app.use("/api", productsRoutes)
 
-// Función: Eliminar producto
-async function deleteProduct(id) {
-  try {
-    const res = await fetch(`${BASE_URL}/products/${id}`, { method: "DELETE" });
-    if (!res.ok) throw new Error(`HTTP ${res.status}`);
+app.use((req, res, next) => {
+    res.status(404).send('Recurso no encontrado o ruta inválida');
+});
 
-    const data = await res.json();
-    console.log(`🗑 Producto ${id} eliminado (API):`);
-    console.log(data);
-  } catch (error) {
-    console.log(`❌ No se pudo eliminar el producto ${id} en la API.`);
-    console.log("Para pruebas locales, eliminar manualmente de productos.json.");
-  }
-}
-
-// Ejecutar según comando ingresado
-(async () => {
-  switch (method?.toUpperCase()) {
-    case "GET":
-      if (resource === "products" && rest.length === 0) await getAllProducts();
-      else if (resource.startsWith("products/")) {
-        const id = resource.split("/")[1];
-        await getProductById(id);
-      } else console.log("Uso: npm run start GET products o GET products/<id>");
-      break;
-
-    case "POST":
-      if (resource === "products" && rest.length >= 3) {
-        const [title, price, category] = rest;
-        await createProduct(title, Number(price), category);
-      } else console.log("Uso: npm run start POST products <title> <price> <category>");
-      break;
-
-    case "DELETE":
-      if (resource.startsWith("products/")) {
-        const id = resource.split("/")[1];
-        await deleteProduct(id);
-      } else console.log("Uso: npm run start DELETE products/<id>");
-      break;
-
-    default:
-      console.log("Comando no reconocido. Ejemplos:");
-      console.log("npm run start GET products");
-      console.log("npm run start GET products/15");
-      console.log("npm run start POST products T-Shirt 300 remeras");
-      console.log("npm run start DELETE products/7");
-  }
-})();
+app.listen(PORT, () => {
+    console.log(`Servidor corriendo en http://localhost:${PORT}`)
+})

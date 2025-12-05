@@ -1,0 +1,9 @@
+node_modules/
+.env
+src/utils/serviceAccountKey.json
+serviceAccountKey.json
+.DS_Store
+.vscode/
+npm-debug.log
+package-lock.json
+.vercel

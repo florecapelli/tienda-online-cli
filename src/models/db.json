@@ -1,0 +1,84 @@
+{
+  "products": [
+    {
+      "id": 1,
+      "name": "Conjunto de encaje rojo",
+      "price": 8900,
+      "description": "Conjunto de encaje rojo, talle S",
+      "stock": 12,
+      "image": "https://picsum.photos/seed/encajerojo/400"
+    },
+    {
+      "id": 2,
+      "name": "Bombacha de algodón clásica",
+      "price": 2500,
+      "description": "Bombacha de algodón clásica, talle M",
+      "stock": 40,
+      "image": "https://picsum.photos/seed/algodonclasica/400"
+    },
+    {
+      "id": 3,
+      "name": "Corpiño push-up nude",
+      "price": 6200,
+      "description": "Corpiño push-up nude, talle 95",
+      "stock": 18,
+      "image": "https://picsum.photos/seed/pushupnude/400"
+    },
+    {
+      "id": 4,
+      "name": "Boxer de algodón gris",
+      "price": 4200,
+      "description": "Boxer gris de algodón, talle L",
+      "stock": 25,
+      "image": "https://picsum.photos/seed/boxergris/400"
+    },
+    {
+      "id": 5,
+      "name": "Vedetina de encaje negra",
+      "price": 3100,
+      "description": "Vedetina de encaje negra, talle M",
+      "stock": 22,
+      "image": "https://picsum.photos/seed/vedetinegra/400"
+    },
+    {
+      "id": 6,
+      "name": "Conjunto deportivo microfibra",
+      "price": 7800,
+      "description": "Conjunto deportivo de microfibra, talle L",
+      "stock": 15,
+      "image": "https://picsum.photos/seed/conjdeportivo/400"
+    },
+    {
+      "id": 7,
+      "name": "Bombacha tiro alto microfibra",
+      "price": 2800,
+      "description": "Bombacha tiro alto beige, talle XL",
+      "stock": 30,
+      "image": "https://picsum.photos/seed/tiroalto/400"
+    },
+    {
+      "id": 8,
+      "name": "Corpiño soft sin aro",
+      "price": 5400,
+      "description": "Corpiño soft sin aro negro, talle 100",
+      "stock": 10,
+      "image": "https://picsum.photos/seed/softsinaro/400"
+    },
+    {
+      "id": 9,
+      "name": "Boxer estampado",
+      "price": 4500,
+      "description": "Boxer de algodón estampado, talle M",
+      "stock": 28,
+      "image": "https://picsum.photos/seed/boxerestampado/400"
+    },
+    {
+      "id": 10,
+      "name": "Conjunto de encaje blanco",
+      "price": 9200,
+      "description": "Conjunto de encaje blanco, talle M",
+      "stock": 14,
+      "image": "https://picsum.photos/seed/encajeblanco/400"
+    }
+  ]
+}

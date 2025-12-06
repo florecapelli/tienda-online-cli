@@ -1,39 +1,43 @@
-import express from "express"
-import cors from "cors"
-import { configDotenv } from "dotenv"
-import rutasLog from "./src/routes/auth.routes.js"
-import productsRoutes from "./src/routes/products.routes.js"
+import express from "express";
+import cors from "cors";
+import bodyParser from "body-parser";
+import dotenv from "dotenv";
+
+import productsRoutes from "./src/routes/products.routes.js";
+import authRoutes from "./src/routes/auth.routes.js";
+
+dotenv.config();
 
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-const corsConfig = {
-    origin: ['http://localhost:3000', 'https://midominio.com'],
-    methods: ['GET', 'POST', 'PUT', 'DELETE'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    exposedHeaders: ['Content-Length'],
-    credentials: true,
-    maxAge: 600,
-    optionsSuccessStatus: 204
-}
+// CORS
+app.use(cors());
 
-app.use(cors(corsConfig))
-app.use(express.json())
+// Body parser (requisito explícito)
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-app.use("/api", rutasLog)
+// Rutas
+app.use("/api/products", productsRoutes); // products endpoints
+app.use("/auth", authRoutes); // login en /auth/login (tal como pide la consigna)
 
+// Logger simple (opcional)
 app.use((req, res, next) => {
-    console.log(`Datos received at:  ${req.method} ${req.url}`);
-    next();
+  console.log(`${new Date().toISOString()} - ${req.method} ${req.originalUrl}`);
+  next();
 });
 
-// CORREGIDO 👇
-app.use("/api", productsRoutes)
-
-app.use((req, res, next) => {
-    res.status(404).send('Recurso no encontrado o ruta inválida');
+// 404 para rutas no definidas (obligatorio)
+app.use((req, res) => {
+  res.status(404).json({ message: "Recurso no encontrado" });
 });
 
-app.listen(PORT, () => {
-    console.log(`Servidor corriendo en http://localhost:${PORT}`)
-})
+// Error handler global (captura errores no manejados)
+app.use((err, req, res, next) => {
+  console.error("Unhandled error:", err);
+  res.status(err.status || 500).json({ message: err.message || "Error interno del servidor" });
+});
+
+app.listen(3000, () => console.log("Server running on http://localhost:3000"));
+

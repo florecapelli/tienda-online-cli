@@ -1,20 +1,19 @@
-import express from "express"
+import { Router } from "express";
 import {
-    addProduct,
-    deleteProduct,
-    getAllProducts,
-    getProductById
-} from "../controllers/products.controller.js"
-import { authentication } from "../middleware/auth.middleware.js";
+  addProduct,
+  deleteProduct,
+  getAllProducts,
+  getProductById,
+  updateProduct
+} from "../controllers/products.controllers.js";
 
+const router = Router();
 
-const router = express.Router()
+// Rutas CRUD
+router.get("/", getAllProducts);
+router.get("/:id", getProductById);
+router.post("/", addProduct);
+router.patch("/:id", updateProduct);
+router.delete("/:id", deleteProduct);
 
-router.get("/products", getAllProducts)
-
-router.get("/products/:id", getProductById)
-
-router.post("/products/create", authentication, addProduct);
-router.delete("/products/:id", authentication, deleteProduct);
-
-export default router
+export default router;

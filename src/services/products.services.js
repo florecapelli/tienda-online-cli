@@ -1,77 +1,37 @@
-import {
-  agregarProducto,
-  eliminarProducto,
-  obtenerProducto,
-  obtenerProductos
-} from "../models/products.model.js";
+import { db } from "../data/data.js";
 
-
-export const addProductService = async (product) => {
-  return(
-    new Promise(async (res, rej) => {
-      try{
-        const newProduct = await agregarProducto(product)
-        res(newProduct)
-      }catch(error){
-        rej(error)
-      }
-    })
-  )
-
+export class ProductModel {
+  constructor({ nombre, precio = 0, stock = 0, descripcion = "" }) {
+    this.id = Date.now().toString();
+    this.nombre = nombre;
+    this.precio = precio;
+    this.stock = stock;
+    this.descripcion = descripcion;
+    this.createdAt = new Date().toISOString();
+  }
 }
 
-export const deleteProductService = async (id) => {
-  console.log(id)
-  return(
-    new Promise(async (res, rej) => {
-      try{
-        await eliminarProducto(id)
-        console.log("despues de eliminar el producto")
-        res()
-      }catch(error){
-        rej(error)
-      }
-    })
-  )
+// Obtener todos
+export async function obtenerProductos() {
+  return db.products;
 }
 
-/*
-export const editProductService = async (id, product) => {
-  return(
-    new Promise(async (res, rej) => {
-      try{
-        const newProduct = await actualizarProducto(id, product)
-        res(newProduct)
-      }catch(error){
-        rej(error)
-      }
-    })
-  )
-}*/
+// Obtener uno
+export async function obtenerProducto(id) {
+  return db.products.find(p => p.id === id) || null;
+}
 
-export const getAllProductsService = async () => {
-  return(
-    new Promise(async (res,rej)=> {
-      console.log("test2 dentro de servicio")
-      try{
-        const productos = await obtenerProductos()
-        res(productos);
-      }catch(error){
-        rej()
-      }
-    })
-  )
-};
+// Agregar
+export async function agregarProducto(data) {
+  const newProduct = new ProductModel(data);
+  db.products.push(newProduct);
+  return newProduct;
+}
 
-export const getProductByIdService = async (id) => {
-  return(
-    new Promise(async(res, rej) => {
-      try{
-        const product = await obtenerProducto(id)
-        res(product)
-      }catch(error){
-        rej(error)
-      }
-    })
-  )
-};
+// Eliminar
+export async function eliminarProducto(id) {
+  const index = db.products.findIndex(p => p.id === id);
+  if (index === -1) return false;
+  db.products.splice(index, 1);
+  return true;
+}

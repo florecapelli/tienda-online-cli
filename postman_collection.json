@@ -1,0 +1,27 @@
+{
+  "info": { "name": "Talento Tech API", "_postman_id": "talento-tech-001", "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json" },
+  "item": [
+    {
+      "name": "Login",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Content-Type", "value": "application/json" }],
+        "url": "http://localhost:3000/auth/login",
+        "body": { "mode": "raw", "raw": "{\"email\":\"test@gmail.com\",\"password\":\"123456\"}" }
+      }
+    },
+    {
+      "name": "Get Products",
+      "request": { "method": "GET", "url": "http://localhost:3000/api/products" }
+    },
+    {
+      "name": "Create Product",
+      "request": {
+        "method": "POST",
+        "header": [{ "key": "Authorization", "value": "Bearer {{token}}" }, { "key":"Content-Type","value":"application/json" }],
+        "url": "http://localhost:3000/api/products/create",
+        "body": { "mode": "raw", "raw": "{\"nombre\":\"Perfume\",\"precio\":1500,\"stock\":10}" }
+      }
+    }
+  ]
+}

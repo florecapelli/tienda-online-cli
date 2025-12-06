@@ -7,8 +7,8 @@ const JWT_SECRET = process.env.JWT_SECRET || "secret";
 const JWT_EXPIRES_IN = process.env.JWT_EXPIRES_IN || "1h";
 
 const users = [
-  { id: "1", username: "admin", password: "admin123", role: "admin" },
-  { id: "2", username: "user", password: "user123", role: "user" },
+  { id: "1", username: "test@gmail.com", password: "123456", role: "admin" },
+  
 ];
 
 export function loginService(username, password) {
@@ -18,3 +18,7 @@ export function loginService(username, password) {
   const token = jwt.sign(payload, JWT_SECRET, { expiresIn: JWT_EXPIRES_IN });
   return { token, user: payload };
 }
+export const validateUser = (email, password) => {
+  // Para pruebas: usuario hardcodeado. En producción, consultar DB.
+  return email === "test@gmail.com" && password === "123456";
+};
